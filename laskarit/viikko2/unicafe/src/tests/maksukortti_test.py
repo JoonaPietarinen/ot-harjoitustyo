@@ -7,3 +7,22 @@ class TestMaksukortti(unittest.TestCase):
 
     def test_luotu_kortti_on_olemassa(self):
         self.assertNotEqual(self.maksukortti, None)
+
+    def test_kortin_saldo_oikein(self):
+        self.assertEqual(self.maksukortti.saldo, 1000)
+    
+    def test_rahan_lataaminen_kasvattaa_saldoa(self):
+        self.maksukortti.lataa_rahaa(250)
+        self.assertEqual(self.maksukortti.saldo, 1250)
+    
+    def test_rahan_ottaminen_vahentaa_saldoa(self):
+        self.maksukortti.ota_rahaa(250)
+        self.assertEqual(self.maksukortti.saldo, 750)
+    
+    def test_rahan_ottaminen_ei_onnistu_jos_saldo_ei_riita(self):
+        self.maksukortti.ota_rahaa(1500)
+        self.assertEqual(self.maksukortti.saldo, 1000)
+    
+    def test_rahan_ottaminen_palauttaa_true_tai_false(self):
+        self.assertEqual(self.maksukortti.ota_rahaa(1500), False)
+        self.assertEqual(self.maksukortti.ota_rahaa(15), True)
