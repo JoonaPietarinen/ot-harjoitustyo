@@ -2,8 +2,61 @@
 
 Olen toteuttamassa yksinkertaista _**roguelike-tyyppistä luolastoseikkailupeliä**_, jossa pelaaja etenee _vihollisia_ ja _ansoja_ sisältävissä tasoissa, kerää **esineitä** ja pyrkii selviytymään mahdollisimman pitkälle. 
 
-[Laskarit](laskarit)
+## Dokumentaatio
 
-[Määrittelydokumentti](dokumentaatio/vaatimusmaarittely.md)
+- [Määrittelydokumentti](dokumentaatio/vaatimusmaarittely.md)
 
-[Työaikakirjanpito](dokumentaatio/Tyoaikakirjanpito.md)
+- [Työaikakirjanpito](dokumentaatio/Tyoaikakirjanpito.md)
+
+- [Changelog](dokumentaatio/changelog.md)
+
+## Käynnistys
+
+Asenna riippuvuudet:
+
+```bash
+poetry install
+```
+
+Käynnistä peli:
+
+```bash
+poetry run invoke run
+```
+
+### Pelin ohjaus
+
+- `w` = ylös
+- `a` = vasen
+- `s` = alas
+- `d` = oikea
+- `q` = lopeta peli
+
+
+## Komentorivitoiminnot
+
+### Pelin käynnistys
+
+Pelin voi käynnistää komennolla:
+
+```bash
+poetry run invoke run
+```
+
+### Testaus
+
+Testit voi suorittaa komennolla:
+
+```bash
+poetry run invoke test
+```
+
+### Testikattavuus
+
+Testikattavuusraportin voi generoida komennolla:
+
+```bash
+poetry run invoke coverage-report
+```
+
+Generoidun raportin voit löytää _htmlcov_-hakemistosta.
