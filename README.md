@@ -12,6 +12,8 @@ Olen toteuttamassa yksinkertaista _**roguelike-tyyppistä luolastoseikkailupeli�
 
 ## Käynnistys
 
+Peli toimii sekä Linuxilla että Windowsilla.
+
 Asenna riippuvuudet:
 
 ```bash
