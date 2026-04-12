@@ -6,7 +6,7 @@ SEP = " & " if IS_WINDOWS else "; "
 
 
 @task
-def run(ctx):
+def start(ctx):
     ctx.run("python3 src/main.py", pty=not IS_WINDOWS)
 
 
@@ -19,3 +19,7 @@ def test(ctx):
 def coverage_report(ctx):
     cmd = f"coverage run --branch -m pytest src{SEP}coverage html"
     ctx.run(cmd, pty=not IS_WINDOWS)
+
+@task
+def lint(ctx):
+    ctx.run("pylint src", pty=not IS_WINDOWS)
