@@ -18,23 +18,23 @@ Pelin käynnistyttyä pelaajalle näytetään päävalikko, josta voi aloittaa u
 
 ### Pelin aloitus ja perusnäkymä
 
-- Pelaaja voi käynnistää sovelluksen ja siirtyä päävalikkoon.  
-- Pelaaja voi aloittaa uuden pelin päävalikosta.  
-- Uusi peli käynnistyy ennalta määritellystä luolastosta, jossa on seinistä ja lattiasta koostuva ruudukkokartta.  
-- Pelaaja näkee kartan lisäksi oman hahmonsa elämäpisteet ja mahdolliset perustilastot (esim. taso tai tappojen määrä).
+- Pelaaja voi käynnistää sovelluksen ja siirtyä päävalikkoon.  – tehty
+- Pelaaja voi aloittaa uuden pelin päävalikosta.  – tehty
+- Uusi peli käynnistyy ennalta määritellystä luolastosta, jossa on seinistä ja lattiasta koostuva ruudukkokartta.  – tehty
+- Pelaaja näkee kartan lisäksi oman hahmonsa elämäpisteet ja mahdolliset perustilastot (esim. taso tai tappojen määrä).  – tehty
 
 ### Liikkuminen ja ympäristö
 
-- Pelaaja voi liikkua neljään suuntaan (ylös, alas, vasen, oikea).  
-- Liikkuminen ei onnistu seinäruutuihin tai kartan ulkopuolelle.  
-- Kartalla voi olla erilaisia ruututyyppejä (esim. lattia, seinä, uloskäynti), jotka vaikuttavat liikkumiseen.
+- Pelaaja voi liikkua neljään suuntaan (ylös, alas, vasen, oikea).  – tehty
+- Liikkuminen ei onnistu seinäruutuihin tai kartan ulkopuolelle.  – tehty
+- Kartalla voi olla erilaisia ruututyyppejä (esim. lattia, seinä, uloskäynti), jotka vaikuttavat liikkumiseen.  – tehty
 
 ### Viholliset ja taistelu
 
-- Kartalla on vähintään yksi vihollistyyppi, joka näkyy pelaajalle ruudulla.  
-- Viholliset toimivat vuoropohjaisesti: aina pelaajan vuoron jälkeen on vihollisten vuoro.  
-- Kun pelaaja liikkuu vihollisen ruutuun tai hyökkää sen viereen, käynnistyy yksinkertainen taistelumekaniikka (esim. hyökkäys, vihollisen vastahyökkäys).  
-- Jos pelaajan elämäpisteet laskevat nollaan, peli päättyy häviöön.
+- Kartalla on vähintään yksi vihollistyyppi, joka näkyy pelaajalle ruudulla.  – tehty
+- Viholliset toimivat vuoropohjaisesti: aina pelaajan vuoron jälkeen on vihollisten vuoro.  – tehty
+- Kun pelaaja liikkuu vihollisen ruutuun tai hyökkää sen viereen, käynnistyy yksinkertainen taistelumekaniikka (esim. hyökkäys, vihollisen vastahyökkäys).  – tehty
+- Jos pelaajan elämäpisteet laskevat nollaan, peli päättyy häviöön.  – tehty
 
 ### Esineet
 
@@ -43,9 +43,9 @@ Pelin käynnistyttyä pelaajalle näytetään päävalikko, josta voi aloittaa u
 
 ### Pelin päättyminen ja tulos
 
-- Peli päättyy, kun pelaaja kuolee tai saavuttaa tason uloskäynnin.  
-- Peli laskee yksinkertaisen pistemäärän (esim. kuljetut askeleet, tapetut viholliset, kerätyt esineet).  
-- Peli näyttää lopputuloksen yhteenvedon (esim. pistemäärä ja muut olennaiset tilastot).
+- Peli päättyy, kun pelaaja kuolee tai saavuttaa tason uloskäynnin.  – tehty
+- Peli laskee yksinkertaisen pistemäärän (esim. kuljetut askeleet, tapetut viholliset, kerätyt esineet).  – tehty
+- Peli näyttää lopputuloksen yhteenvedon (esim. pistemäärä ja muut olennaiset tilastot).  – tehty
 
 ### Tietojen tallennus
 
