@@ -66,13 +66,18 @@ class ConsoleUI:
         for y, row in enumerate(game.map_rows):
             rendered = ""
             for x, tile in enumerate(row):
+                enemy = game.enemy_at(x, y)
                 if x == game.player.x and y == game.player.y:
                     rendered += "@"
+                elif enemy is not None:
+                    rendered += enemy.symbol
                 else:
                     rendered += tile
             print(rendered)
 
-        print(f"HP: {game.player.hp}/{game.player.max_hp} | Askeleet: {game.player.steps}")
+        print(
+            f"HP: {game.player.hp}/{game.player.max_hp} | Askeleet: {game.player.steps} | Tapot: {game.player.kills}"
+        )
 
     def _update_best_result(self, steps: int):
         if self.best_steps is None or steps < self.best_steps:
@@ -123,7 +128,8 @@ class ConsoleUI:
                     print(key)
                     return key.lower()
             finally:
-                termios.tcsetattr(file_descriptor, termios.TCSADRAIN, old_settings)
+                termios.tcsetattr(
+                    file_descriptor, termios.TCSADRAIN, old_settings)
 
         value = input().strip().lower()
         return value[:1]

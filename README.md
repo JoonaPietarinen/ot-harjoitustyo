@@ -40,7 +40,7 @@ poetry run invoke run
 Pelin voi käynnistää komennolla:
 
 ```bash
-poetry run invoke run
+poetry run invoke start
 ```
 
 ### Testaus

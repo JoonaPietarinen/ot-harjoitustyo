@@ -1,9 +1,12 @@
 from dungeon_game.game import Game
+from dungeon_game.models.enemy import Enemy
+
 
 def test_player_spawn():
     game = Game()
     assert game.player.x == 1
     assert game.player.y == 1
+
 
 def test_player_movement_right():
     game = Game()
@@ -13,6 +16,7 @@ def test_player_movement_right():
     assert game.player.x == 2
     assert game.player.y == 1
 
+
 def test_player_movement_down():
     game = Game()
 
@@ -20,6 +24,7 @@ def test_player_movement_down():
     assert result is None
     assert game.player.x == 1
     assert game.player.y == 2
+
 
 def test_player_movement_into_wall():
     game = Game()
@@ -29,14 +34,17 @@ def test_player_movement_into_wall():
     assert game.player.x == 1
     assert game.player.y == 1
 
+
 def test_player_movement_out_of_bounds():
     game = Game()
 
     result = game.handle_command("a")
-    result = game.handle_command("a")  # Try moving left again to go out of bounds
+    # Try moving left again to go out of bounds
+    result = game.handle_command("a")
     assert result == "Törmäsit seinään."
     assert game.player.x == 0
     assert game.player.y == 1
+
 
 def test_player_wins_game():
     game = Game()
@@ -51,6 +59,7 @@ def test_player_wins_game():
     assert not game.is_running
     assert game.is_won
 
+
 def test_invalid_command():
     game = Game()
 
@@ -59,9 +68,34 @@ def test_invalid_command():
     assert game.player.x == 1
     assert game.player.y == 1
 
+
 def test_quit_command():
     game = Game()
 
     result = game.handle_command("q")
     assert result == "Poistuit pelistä."
     assert not game.is_running
+
+
+def test_player_attacks_enemy_on_target_tile():
+    game = Game()
+    game.enemies = [Enemy(x=2, y=1, hp=2, damage=1)]
+
+    result = game.handle_command("d")
+
+    assert result == "Vihollinen kaatui."
+    assert game.player.x == 1
+    assert game.player.y == 1
+    assert game.player.kills == 1
+    assert len(game.enemies) == 0
+
+
+def test_enemy_turn_attacks_when_adjacent_after_player_move():
+    game = Game()
+    game.enemies = [Enemy(x=3, y=1, hp=5, damage=1)]
+
+    result = game.handle_command("d")
+
+    assert result == "Vihollinen osui sinuun."
+    assert game.player.x == 2
+    assert game.player.hp == 9

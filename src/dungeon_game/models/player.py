@@ -1,4 +1,4 @@
-"""Core game state models."""
+"""Player model."""
 
 from dataclasses import dataclass
 
@@ -10,3 +10,5 @@ class Player:
     hp: int = 10
     max_hp: int = 10
     steps: int = 0
+    damage: int = 2
+    kills: int = 0
