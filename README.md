@@ -23,7 +23,7 @@ poetry install
 Käynnistä peli:
 
 ```bash
-poetry run invoke run
+poetry run invoke start
 ```
 
 ### Pelin ohjaus
@@ -35,17 +35,7 @@ poetry run invoke run
 - `q` = lopeta peli
 
 
-## Komentorivitoiminnot
-
-### Pelin käynnistys
-
-Pelin voi käynnistää komennolla:
-
-```bash
-poetry run invoke start
-```
-
-### Testaus
+## Testaus
 
 Testit voi suorittaa komennolla:
 
