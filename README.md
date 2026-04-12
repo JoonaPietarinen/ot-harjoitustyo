@@ -10,6 +10,8 @@ Olen toteuttamassa yksinkertaista _**roguelike-tyyppistä luolastoseikkailupeli�
 
 - [Changelog](dokumentaatio/changelog.md)
 
+- [Arkkitehtuuri](dokumentaatio/arkkitehtuuri.md)
+
 ## Käynnistys
 
 Peli toimii sekä Linuxilla että Windowsilla.
