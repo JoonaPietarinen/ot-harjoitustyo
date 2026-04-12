@@ -1,0 +1,10 @@
+[run]
+source = src/dungeon_game
+omit =
+    src/dungeon_game/ui.py
+    src/tests/*
+
+[report]
+omit =
+    src/dungeon_game/ui.py
+    src/tests/*
