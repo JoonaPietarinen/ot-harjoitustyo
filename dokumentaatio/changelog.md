@@ -23,3 +23,11 @@
 - Lisätty yksinkertainen taistelu systeemi
 - Pelaaja luokkaan lisätty vahinko (damage) ja tapot
 - Pelaaja voi nyt hävitä pelin kuollessaan
+
+## Viikko 5
+
+- Erotettu käyttöliittymätekstit sovelluslogiikasta `GameEvent`-enumin avulla
+- Lisätty tulosten pysyvä tallennus tiedostoon (`data/scores.json`)
+- Lisätty `ScoreRepository`, joka vastaa tulosten lukemisesta ja tallentamisesta
+- Päävalikon "Tulokset" näyttää tallennetut top 10 tulosta
+- Lisätty repositoryn automaattiset testit (`test_score_repository.py`)

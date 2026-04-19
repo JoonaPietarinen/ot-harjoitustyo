@@ -49,8 +49,8 @@ Pelin käynnistyttyä pelaajalle näytetään päävalikko, josta voi aloittaa u
 
 ### Tietojen tallennus
 
-- Sovellus tallentaa perusversiossa ainakin yhden tyyppisen pysyvän tiedon tiedostoon (esim. paras pistetulos tai lista parhaista tuloksista).  
-- Pelaaja voi päävalikosta tarkastella aiempia tallennettuja tuloksia.
+- Sovellus tallentaa perusversiossa ainakin yhden tyyppisen pysyvän tiedon tiedostoon (esim. paras pistetulos tai lista parhaista tuloksista).  – tehty
+- Pelaaja voi päävalikosta tarkastella aiempia tallennettuja tuloksia.  – tehty
 
 ## Jatkokehitysideoita
 

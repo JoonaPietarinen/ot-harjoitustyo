@@ -15,6 +15,7 @@ except ImportError:  # pragma: no cover - Not available on Windows.
     tty = None
 
 from dungeon_game.game import Game, GameEvent
+from dungeon_game.repositories.score_repository import ScoreRepository
 
 
 class ConsoleUI:
@@ -32,7 +33,7 @@ class ConsoleUI:
     }
 
     def __init__(self):
-        self.best_steps = None
+        self.score_repository = ScoreRepository()
 
     def run(self):
         while True:
@@ -73,7 +74,7 @@ class ConsoleUI:
         if game.is_won:
             print("Voitit pelin!")
             print(f"Askeleet: {game.player.steps}")
-            self._update_best_result(game.player.steps)
+            self._save_result(game.player.steps)
         else:
             print("Peli päättyi.")
 
@@ -95,18 +96,25 @@ class ConsoleUI:
             f"HP: {game.player.hp}/{game.player.max_hp} | Askeleet: {game.player.steps} | Tapot: {game.player.kills}"
         )
 
-    def _update_best_result(self, steps: int):
-        if self.best_steps is None or steps < self.best_steps:
-            self.best_steps = steps
+    def _save_result(self, steps: int):
+        previous_best = self.score_repository.get_best_score()
+        self.score_repository.save_score(steps)
+        current_best = self.score_repository.get_best_score()
+
+        if previous_best is None or (current_best is not None and current_best < previous_best):
             print("Uusi paras tulos!")
 
     def _show_results(self):
         print("\n=== Tulokset ===")
-        if self.best_steps is None:
+        scores = self.score_repository.get_scores()
+        if not scores:
             print("Ei tallennettuja tuloksia.")
             return
 
-        print(f"Paras tulos: {self.best_steps}")
+        print(f"Paras tulos: {scores[0]} askelta")
+        print("Top 10:")
+        for index, score in enumerate(scores, start=1):
+            print(f"{index}. {score} askelta")
 
     def _read_single_key(self, prompt: str) -> str:
         """
