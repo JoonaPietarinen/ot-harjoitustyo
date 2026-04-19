@@ -14,10 +14,23 @@ except ImportError:  # pragma: no cover - Not available on Windows.
     termios = None
     tty = None
 
-from dungeon_game.game import Game
+from dungeon_game.game import Game, GameEvent
 
 
 class ConsoleUI:
+    EVENT_MESSAGES = {
+        GameEvent.HIT_WALL: "Törmäsit seinään.",
+        GameEvent.EXIT_FOUND: "Löysit uloskäynnin!",
+        GameEvent.QUIT: "Poistuit pelistä.",
+        GameEvent.GAME_ALREADY_OVER: "Peli on jo päättynyt.",
+        GameEvent.INVALID_COMMAND: "Tuntematon komento. Käytä: w, a, s, d tai q.",
+        GameEvent.PLAYER_ATTACKED: "Hyökkäsit viholliseen.",
+        GameEvent.ENEMY_DEFEATED: "Vihollinen kaatui.",
+        GameEvent.PLAYER_DIED_IN_COMBAT: "Kuolit taistelussa.",
+        GameEvent.ENEMY_HIT_PLAYER: "Vihollinen osui sinuun.",
+        GameEvent.ENEMY_HIT_PLAYER_FATAL: "Vihollinen osui sinuun. Kuolit.",
+    }
+
     def __init__(self):
         self.best_steps = None
 
@@ -51,9 +64,12 @@ class ConsoleUI:
             if message:
                 print(message)
             command = self._read_single_key("Komento (w/a/s/d, q=lopeta): ")
-            message = game.handle_command(command)
+            event = game.handle_command(command)
+            message = self.EVENT_MESSAGES.get(event, "")
 
         self._draw_game(game)
+        if message:
+            print(message)
         if game.is_won:
             print("Voitit pelin!")
             print(f"Askeleet: {game.player.steps}")
