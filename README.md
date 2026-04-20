@@ -12,7 +12,7 @@ Olen toteuttamassa yksinkertaista _**roguelike-tyyppistä luolastoseikkailupeli�
 
 - [Arkkitehtuuri](dokumentaatio/arkkitehtuuri.md)
 
-- [Viikko 5 release](https://github.com/JoonaPietarinen/shakki-tekoaly/releases/tag/v1.0.0)
+- [Viikko 5 release](https://github.com/JoonaPietarinen/ot-harjoitustyo/releases/tag/viikko5)
 
 ## Käynnistys
 
