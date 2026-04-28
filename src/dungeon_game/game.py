@@ -9,6 +9,11 @@ from dungeon_game.models.potion import Potion
 
 
 class GameEvent(Enum):
+    """Enumeration of events that occur during gameplay.
+    
+    These events communicate the results of player actions to the UI layer,
+    keeping game logic separate from presentation.
+    """
     NONE = auto()
     HIT_WALL = auto()
     EXIT_FOUND = auto()
@@ -26,7 +31,22 @@ class GameEvent(Enum):
 
 
 class Game:
+    """Main game logic and state management.
+    
+    Handles player movement, combat resolution, item collection, and turn-based
+    enemy AI. Maintains the game map and all entities (player, enemies, potions).
+    
+    Attributes:
+        map_rows: 2D list representing the game map tiles.
+        player: The Player object.
+        enemies: List of active Enemy objects.
+        potions: List of Potion objects on the map.
+        is_running: Whether the game is currently active.
+        is_won: Whether the player has reached the exit.
+    """
+
     def __init__(self):
+        """Initialize a new game with the default map and entities."""
         self.map_rows = [list(row) for row in DEFAULT_MAP]
         self.height = len(self.map_rows)
         self.width = len(self.map_rows[0])
@@ -37,23 +57,59 @@ class Game:
         self.is_won = False
 
     def tile_at(self, x: int, y: int) -> str:
+        """Get the tile type at the given coordinates.
+        
+        Args:
+            x: X-coordinate.
+            y: Y-coordinate.
+            
+        Returns:
+            The tile character, or WALL if coordinates are out of bounds.
+        """
         if x < 0 or y < 0 or x >= self.width or y >= self.height:
             return WALL
         return self.map_rows[y][x]
 
     def enemy_at(self, x: int, y: int) -> Enemy | None:
+        """Find an alive enemy at the given coordinates.
+        
+        Args:
+            x: X-coordinate.
+            y: Y-coordinate.
+            
+        Returns:
+            The Enemy object if one exists, None otherwise.
+        """
         for enemy in self.enemies:
             if enemy.x == x and enemy.y == y and enemy.is_alive:
                 return enemy
         return None
 
     def potion_at(self, x: int, y: int) -> Potion | None:
+        """Find a potion at the given coordinates.
+        
+        Args:
+            x: X-coordinate.
+            y: Y-coordinate.
+            
+        Returns:
+            The Potion object if one exists, None otherwise.
+        """
         for potion in self.potions:
             if potion.x == x and potion.y == y:
                 return potion
         return None
 
     def _collect_potion(self, x: int, y: int) -> GameEvent:
+        """Attempt to collect a potion at the given coordinates.
+        
+        Args:
+            x: X-coordinate.
+            y: Y-coordinate.
+            
+        Returns:
+            POTION_PICKED_UP if successful, NONE otherwise.
+        """
         potion = self.potion_at(x, y)
         if potion is None:
             return GameEvent.NONE
@@ -63,6 +119,11 @@ class Game:
         return GameEvent.POTION_PICKED_UP
 
     def use_potion(self) -> GameEvent:
+        """Use a potion from inventory to restore health.
+        
+        Returns:
+            POTION_USED if successful, NO_POTION_AVAILABLE if no potions in inventory.
+        """
         if self.player.potions <= 0:
             return GameEvent.NO_POTION_AVAILABLE
 
@@ -71,6 +132,14 @@ class Game:
         return GameEvent.POTION_USED
 
     def _resolve_player_attack(self, enemy: Enemy) -> GameEvent:
+        """Resolve combat between player and an enemy.
+        
+        Args:
+            enemy: The Enemy being attacked.
+            
+        Returns:
+            GameEvent indicating the combat result.
+        """
         enemy.take_damage(self.player.damage)
         if not enemy.is_alive:
             self.enemies.remove(enemy)
@@ -87,6 +156,13 @@ class Game:
         return GameEvent.PLAYER_ATTACKED
 
     def _enemy_turn(self) -> GameEvent:
+        """Execute enemy AI for all alive enemies.
+        
+        Enemies attack if adjacent to the player.
+        
+        Returns:
+            GameEvent indicating if any enemy attacked and the result.
+        """
         for enemy in self.enemies:
             distance = abs(enemy.x - self.player.x) + abs(enemy.y - self.player.y)
             if distance == 1:
@@ -100,6 +176,17 @@ class Game:
         return GameEvent.NONE
 
     def move_player(self, dx: int, dy: int) -> GameEvent:
+        """Attempt to move the player by the given offset.
+        
+        Checks for walls, enemies, and items at the destination.
+        
+        Args:
+            dx: X-axis movement offset.
+            dy: Y-axis movement offset.
+            
+        Returns:
+            GameEvent indicating the result of the movement.
+        """
         next_x = self.player.x + dx
         next_y = self.player.y + dy
 
@@ -127,6 +214,14 @@ class Game:
         return GameEvent.NONE
 
     def handle_command(self, command: str) -> GameEvent:
+        """Process a player command and update game state.
+        
+        Args:
+            command: Single character command (w/a/s/d for movement, u for potion, q to quit).
+            
+        Returns:
+            GameEvent describing what happened.
+        """
         movement = {
             "w": (0, -1),
             "s": (0, 1),

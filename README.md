@@ -4,6 +4,8 @@ Olen toteuttamassa yksinkertaista _**roguelike-tyyppistä luolastoseikkailupeli�
 
 ## Dokumentaatio
 
+- [Käyttöohje](dokumentaatio/kayttoohje.md)
+
 - [Määrittelydokumentti](dokumentaatio/vaatimusmaarittely.md)
 
 - [Työaikakirjanpito](dokumentaatio/Tyoaikakirjanpito.md)
