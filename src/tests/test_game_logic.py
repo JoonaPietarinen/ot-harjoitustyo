@@ -50,10 +50,10 @@ def test_player_movement_out_of_bounds():
 def test_player_wins_game():
     game = Game()
 
-    # Move down 4 times, right 8 times and up once to reach the exit
+    # Move down 4 times, right 8 (plus one to kill enemy) times and up once to reach the exit
     for _ in range(4):
         game.handle_command("s")
-    for _ in range(8):
+    for _ in range(9):
         game.handle_command("d")
     result = game.handle_command("w")
 
@@ -100,7 +100,7 @@ def test_enemy_turn_attacks_when_adjacent_after_player_move():
 
     assert result == GameEvent.ENEMY_HIT_PLAYER
     assert game.player.x == 2
-    assert game.player.hp == 9
+    assert game.player.hp == 2
 
 
 def test_player_picks_up_potion_when_moving_to_tile():
@@ -119,13 +119,13 @@ def test_player_picks_up_potion_when_moving_to_tile():
 
 def test_player_uses_potion_and_heals():
     game = Game()
-    game.player.hp = 6
+    game.player.hp = 1
     game.player.potions = 1
 
     result = game.handle_command("u")
 
     assert result == GameEvent.POTION_USED
-    assert game.player.hp == 10
+    assert game.player.hp == 3
     assert game.player.potions == 0
 
 
