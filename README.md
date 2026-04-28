@@ -14,7 +14,7 @@ Olen toteuttamassa yksinkertaista _**roguelike-tyyppistä luolastoseikkailupeli�
 
 - [Arkkitehtuuri](dokumentaatio/arkkitehtuuri.md)
 
-- [Viikko 5 release](https://github.com/JoonaPietarinen/ot-harjoitustyo/releases/tag/viikko5)
+- [Release](https://github.com/JoonaPietarinen/ot-harjoitustyo/releases/tag/viikko5)
 
 ## Käynnistys
 
