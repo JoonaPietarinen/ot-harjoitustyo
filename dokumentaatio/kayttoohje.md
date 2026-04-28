@@ -7,7 +7,6 @@
 - Poetry (Python-riippuvuuksien hallintaan)
 
 ### Asennus
-Palautusrepositoriosta:
 
 ```bash
 cd ot-harjoitustyo

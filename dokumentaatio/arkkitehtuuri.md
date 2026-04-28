@@ -2,9 +2,7 @@
 
 ## Yleiskuvaus
 
-Luolastopeli on vuoropohjainen dungeon crawlerien kaltainen peli, jossa pelaaja liikkuu ruudukkopohjaisessa karttaympäristössä, taistelee vihollisia vastaan ja kerää esineitä. Peli ohjelmoitu käyttäen **kerrosarkkitehtuuri
-
-n** periaatteita, jossa sovelluslogiikka on selvästi erotettu käyttöliittymäkerroksesta.
+Luolastopeli on vuoropohjainen dungeon crawlerien kaltainen peli, jossa pelaaja liikkuu ruudukkopohjaisessa karttaympäristössä, taistelee vihollisia vastaan ja kerää esineitä. Peli ohjelmoitu käyttäen **kerrosarkkitehtuurin** periaatteita, jossa sovelluslogiikka on selvästi erotettu käyttöliittymäkerroksesta.
 
 ## Pakkausrakenne
 
