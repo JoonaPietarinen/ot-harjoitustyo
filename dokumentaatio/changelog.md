@@ -31,3 +31,17 @@
 - Lisätty `ScoreRepository`, joka vastaa tulosten lukemisesta ja tallentamisesta
 - Päävalikon "Tulokset" näyttää tallennetut top 10 tulosta
 - Lisätty repositoryn automaattiset testit (`test_score_repository.py`)
+
+## Viikko 6
+
+- Lisätty potion-esineet ja keräysmekaniikka
+- Pelaaja voi käyttää juoman komennolla `u`
+- Lisätty `Potion`-malli ja potionien näkyminen kartalla
+- Pelaajan tilaan lisättiin juomien määrä
+- Lisätty testit potionien poimimiselle, käytölle ja juoman puuttumiselle
+- Lisätty pygame-pohjainen käyttöliittymä tekstikäyttöliittymän rinnalle
+- Pelaaja voi ohjata peliä ilman terminaalisyötettä pygame-ikkunassa
+- Kartta, viholliset, potionit ja pelaajan tilastot piirretään graafisesti
+- Päävalikko ja tulosnäkymä toteutettiin pygame-ikkunaan
+- Muutoksia pelaajan ja vihollisten elämäpisteisiin
+- Peli tallentaa nyt myös tappojen määrän

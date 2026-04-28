@@ -2,9 +2,11 @@
 source = src/dungeon_game
 omit =
     src/dungeon_game/ui.py
+    src/dungeon_game/pygame_ui.py
     src/tests/*
 
 [report]
 omit =
     src/dungeon_game/ui.py
+    src/dungeon_game/pygame_ui.py
     src/tests/*

@@ -7,7 +7,7 @@ from dataclasses import dataclass
 class Enemy:
     x: int
     y: int
-    hp: int = 5
+    hp: int = 2
     damage: int = 1
     symbol: str = "E"
 

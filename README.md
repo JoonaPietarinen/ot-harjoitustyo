@@ -28,12 +28,15 @@ Käynnistä peli:
 poetry run invoke start
 ```
 
+Peli avautuu pygame-ikkunassa.
+
 ### Pelin ohjaus
 
 - `w` = ylös
 - `a` = vasen
 - `s` = alas
 - `d` = oikea
+- `u` = käytä juoma
 - `q` = lopeta peli
 
 

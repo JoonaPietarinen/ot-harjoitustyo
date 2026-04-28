@@ -11,4 +11,8 @@
 | 12.4  | 5  | lisäsin taistelun käsittelyn, testejä ja päivitin dokumentaatiota  |
 | 18.4  | 2  | erotin UI:n pelilogiikasta  |
 | 19.4  | 5  | lisäsin tulosten pysyvän tallennuksen ja ScoreRepositoryn  |
-| yht.  | 24   |    |
+| 22.4  | 2  | lisäsin potionit ja niiden käytön  |
+| 24.4  | 6  | pygame otettu käyttöön  |
+| 25.4  | 2  | pygame hiomista  |
+| 28.4  | 1  | lisätty vihollisia, ja päivitetty elämäpisteitä  |
+| yht.  | 33   |    |

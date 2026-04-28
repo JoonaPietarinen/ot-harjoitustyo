@@ -5,6 +5,7 @@ from enum import Enum, auto
 from dungeon_game.game_map import DEFAULT_MAP, EXIT, WALL
 from dungeon_game.models.enemy import Enemy
 from dungeon_game.models.player import Player
+from dungeon_game.models.potion import Potion
 
 
 class GameEvent(Enum):
@@ -19,6 +20,9 @@ class GameEvent(Enum):
     PLAYER_DIED_IN_COMBAT = auto()
     ENEMY_HIT_PLAYER = auto()
     ENEMY_HIT_PLAYER_FATAL = auto()
+    POTION_PICKED_UP = auto()
+    POTION_USED = auto()
+    NO_POTION_AVAILABLE = auto()
 
 
 class Game:
@@ -27,7 +31,8 @@ class Game:
         self.height = len(self.map_rows)
         self.width = len(self.map_rows[0])
         self.player = Player(x=1, y=1)
-        self.enemies = [Enemy(x=8, y=1)]
+        self.enemies = [Enemy(x=8, y=1), Enemy(x=6, y=5), Enemy(x=7, y=4)]
+        self.potions = [Potion(x=4, y=1)]
         self.is_running = True
         self.is_won = False
 
@@ -41,6 +46,29 @@ class Game:
             if enemy.x == x and enemy.y == y and enemy.is_alive:
                 return enemy
         return None
+
+    def potion_at(self, x: int, y: int) -> Potion | None:
+        for potion in self.potions:
+            if potion.x == x and potion.y == y:
+                return potion
+        return None
+
+    def _collect_potion(self, x: int, y: int) -> GameEvent:
+        potion = self.potion_at(x, y)
+        if potion is None:
+            return GameEvent.NONE
+
+        self.potions.remove(potion)
+        self.player.potions += 1
+        return GameEvent.POTION_PICKED_UP
+
+    def use_potion(self) -> GameEvent:
+        if self.player.potions <= 0:
+            return GameEvent.NO_POTION_AVAILABLE
+
+        self.player.potions -= 1
+        self.player.hp = min(self.player.max_hp, self.player.hp + 4)
+        return GameEvent.POTION_USED
 
     def _resolve_player_attack(self, enemy: Enemy) -> GameEvent:
         enemy.take_damage(self.player.damage)
@@ -87,10 +115,14 @@ class Game:
         self.player.y = next_y
         self.player.steps += 1
 
+        potion_event = self._collect_potion(next_x, next_y)
         if next_tile == EXIT:
             self.is_running = False
             self.is_won = True
             return GameEvent.EXIT_FOUND
+
+        if potion_event != GameEvent.NONE:
+            return potion_event
 
         return GameEvent.NONE
 
@@ -109,6 +141,14 @@ class Game:
             self.is_running = False
             return GameEvent.QUIT
 
+        if command == "u":
+            result = self.use_potion()
+            if result == GameEvent.POTION_USED:
+                enemy_result = self._enemy_turn()
+                if enemy_result != GameEvent.NONE:
+                    return enemy_result
+            return result
+
         if command in movement:
             dx, dy = movement[command]
             result = self.move_player(dx, dy)
@@ -116,13 +156,17 @@ class Game:
             if not self.is_running:
                 return result
 
-            if result != GameEvent.NONE:
-                return result
+            if result == GameEvent.NONE:
+                enemy_result = self._enemy_turn()
+                if enemy_result != GameEvent.NONE:
+                    return enemy_result
+                return GameEvent.NONE
 
-            enemy_result = self._enemy_turn()
-            if enemy_result != GameEvent.NONE:
-                return enemy_result
+            if result in (GameEvent.POTION_PICKED_UP,):
+                enemy_result = self._enemy_turn()
+                if enemy_result != GameEvent.NONE:
+                    return enemy_result
 
-            return GameEvent.NONE
+            return result
 
         return GameEvent.INVALID_COMMAND

@@ -24,12 +24,15 @@ class ConsoleUI:
         GameEvent.EXIT_FOUND: "Löysit uloskäynnin!",
         GameEvent.QUIT: "Poistuit pelistä.",
         GameEvent.GAME_ALREADY_OVER: "Peli on jo päättynyt.",
-        GameEvent.INVALID_COMMAND: "Tuntematon komento. Käytä: w, a, s, d tai q.",
+        GameEvent.INVALID_COMMAND: "Tuntematon komento. Käytä: w, a, s, d, u tai q.",
         GameEvent.PLAYER_ATTACKED: "Hyökkäsit viholliseen.",
         GameEvent.ENEMY_DEFEATED: "Vihollinen kaatui.",
         GameEvent.PLAYER_DIED_IN_COMBAT: "Kuolit taistelussa.",
         GameEvent.ENEMY_HIT_PLAYER: "Vihollinen osui sinuun.",
         GameEvent.ENEMY_HIT_PLAYER_FATAL: "Vihollinen osui sinuun. Kuolit.",
+        GameEvent.POTION_PICKED_UP: "Poimit juoman.",
+        GameEvent.POTION_USED: "Joit juoman ja sait elämää takaisin.",
+        GameEvent.NO_POTION_AVAILABLE: "Sinulla ei ole juomaa käytettävissä.",
     }
 
     def __init__(self):
@@ -64,7 +67,7 @@ class ConsoleUI:
             self._draw_game(game)
             if message:
                 print(message)
-            command = self._read_single_key("Komento (w/a/s/d, q=lopeta): ")
+            command = self._read_single_key("Komento (w/a/s/d/u, q=lopeta): ")
             event = game.handle_command(command)
             message = self.EVENT_MESSAGES.get(event, "")
 
@@ -74,7 +77,8 @@ class ConsoleUI:
         if game.is_won:
             print("Voitit pelin!")
             print(f"Askeleet: {game.player.steps}")
-            self._save_result(game.player.steps)
+            print(f"Tapot: {game.player.kills}")
+            self._save_result(game.player.steps, game.player.kills)
         else:
             print("Peli päättyi.")
 
@@ -84,24 +88,29 @@ class ConsoleUI:
             rendered = ""
             for x, tile in enumerate(row):
                 enemy = game.enemy_at(x, y)
+                potion = game.potion_at(x, y)
                 if x == game.player.x and y == game.player.y:
                     rendered += "@"
                 elif enemy is not None:
                     rendered += enemy.symbol
+                elif potion is not None:
+                    rendered += potion.symbol
                 else:
                     rendered += tile
             print(rendered)
 
         print(
-            f"HP: {game.player.hp}/{game.player.max_hp} | Askeleet: {game.player.steps} | Tapot: {game.player.kills}"
+            f"HP: {game.player.hp}/{game.player.max_hp} | Askeleet: {game.player.steps} | Tapot: {game.player.kills} | Juomat: {game.player.potions}"
         )
 
-    def _save_result(self, steps: int):
+    def _save_result(self, steps: int, kills: int):
         previous_best = self.score_repository.get_best_score()
-        self.score_repository.save_score(steps)
+        self.score_repository.save_score(steps, kills)
         current_best = self.score_repository.get_best_score()
 
-        if previous_best is None or (current_best is not None and current_best < previous_best):
+        if previous_best is None or (
+            current_best is not None and current_best["steps"] < previous_best["steps"]
+        ):
             print("Uusi paras tulos!")
 
     def _show_results(self):
@@ -111,10 +120,11 @@ class ConsoleUI:
             print("Ei tallennettuja tuloksia.")
             return
 
-        print(f"Paras tulos: {scores[0]} askelta")
+        best = scores[0]
+        print(f"Paras tulos: {best['steps']} askelta, {best['kills']} tappoa")
         print("Top 10:")
         for index, score in enumerate(scores, start=1):
-            print(f"{index}. {score} askelta")
+            print(f"{index}. {score['steps']} askelta, {score['kills']} tappoa")
 
     def _read_single_key(self, prompt: str) -> str:
         """

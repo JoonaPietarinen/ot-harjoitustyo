@@ -1,5 +1,6 @@
 from dungeon_game.game import Game, GameEvent
 from dungeon_game.models.enemy import Enemy
+from dungeon_game.models.potion import Potion
 
 
 def test_player_spawn():
@@ -100,3 +101,38 @@ def test_enemy_turn_attacks_when_adjacent_after_player_move():
     assert result == GameEvent.ENEMY_HIT_PLAYER
     assert game.player.x == 2
     assert game.player.hp == 9
+
+
+def test_player_picks_up_potion_when_moving_to_tile():
+    game = Game()
+    game.enemies = []
+    game.potions = [Potion(x=2, y=1, heal_amount=4)]
+
+    result = game.handle_command("d")
+
+    assert result == GameEvent.POTION_PICKED_UP
+    assert game.player.x == 2
+    assert game.player.y == 1
+    assert game.player.potions == 1
+    assert len(game.potions) == 0
+
+
+def test_player_uses_potion_and_heals():
+    game = Game()
+    game.player.hp = 6
+    game.player.potions = 1
+
+    result = game.handle_command("u")
+
+    assert result == GameEvent.POTION_USED
+    assert game.player.hp == 10
+    assert game.player.potions == 0
+
+
+def test_using_potion_without_inventory_fails():
+    game = Game()
+
+    result = game.handle_command("u")
+
+    assert result == GameEvent.NO_POTION_AVAILABLE
+    assert game.player.potions == 0

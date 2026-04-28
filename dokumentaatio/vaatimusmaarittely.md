@@ -38,8 +38,8 @@ Pelin käynnistyttyä pelaajalle näytetään päävalikko, josta voi aloittaa u
 
 ### Esineet
 
-- Kartalla voi olla perusesineitä (esim. parantavia potion-juomia).  
-- Pelaaja voi kerätä esineitä ja käyttää niitä (esim. potion palauttaa osan elämäpisteistä).
+- Kartalla voi olla perusesineitä (esim. parantavia potion-juomia).  – tehty
+- Pelaaja voi kerätä esineitä ja käyttää niitä (esim. potion palauttaa osan elämäpisteistä).  – tehty
 
 ### Pelin päättyminen ja tulos
 
@@ -61,4 +61,4 @@ Perusversion jälkeen sovellusta voidaan laajentaa ajan salliessa esimerkiksi se
 - Laajempi esine- ja inventaariomekaniikka, jossa pelaaja voi kantaa useita esineitä, aseita ja panssareita.  
 - Satunnaisesti generoitavat luolastot, jotka luodaan algoritmisesti pelin käynnistyessä tai luetaan konfiguraatiotiedostoista.  
 - Mahdollisuus jatkaa aiemmin tallennettua peliä useamman tallennus-slotin avulla.  
-- Graafinen käyttöliittymä tekstipohjaisen käyttöliittymän rinnalle tai tilalle.
+- Graafinen käyttöliittymä tekstipohjaisen käyttöliittymän rinnalle tai tilalle. – tehty
