@@ -14,5 +14,5 @@
 | 22.4  | 2  | lisäsin potionit ja niiden käytön  |
 | 24.4  | 6  | pygame otettu käyttöön  |
 | 25.4  | 2  | pygame hiomista  |
-| 28.4  | 5  | lisätty vihollisia, ja päivitetty elämäpisteitä, päivitetty dokumentaatiota  |
-| yht.  | 37   |    |
+| 28.4  | 7  | lisätty vihollisia, ja päivitetty elämäpisteitä, päivitetty dokumentaatiota  |
+| yht.  | 39   |    |
