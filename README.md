@@ -8,6 +8,8 @@ Olen toteuttamassa yksinkertaista _**roguelike-tyyppistä luolastoseikkailupeli�
 
 - [Määrittelydokumentti](dokumentaatio/vaatimusmaarittely.md)
 
+- [Testausdokumentti](dokumentaatio/testausdokumentti.md)
+
 - [Työaikakirjanpito](dokumentaatio/Tyoaikakirjanpito.md)
 
 - [Changelog](dokumentaatio/changelog.md)
