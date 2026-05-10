@@ -85,7 +85,7 @@ Coverage-raportin voi luoda komennolla:
 poetry run invoke coverage-report
 ```
 
-Testikattavuus: 95%
+Testikattavuus: 97%
 
 ![](./kuvat/coverage.png)
 
@@ -99,17 +99,17 @@ Integraatiotestaus varmistaa, että sovelluksen eri komponentit toimivat yhdess�
 - Pelaajan liikkuminen päivittää koordinaatit oikein
 - Pelaajan HP muuttuu taistelussa
 - Pelaajan tapot kasvavat vihollisen tappamisen jälkeen
-- Life steal palauttaa HP:tä oikean määrän mukaan
+- Life steal palauttaa HP:ta oikean määrän mukaan
 
 #### Game <-> Enemy
 - Vihollisten luonti vaikeustason mukaan
 - Vihollisten sijainti kartalla
-- Vihollisten AI (liikkuminen lähelle pelaajaa, hyökkäys)
+- Vihollisten AI
 - Vihollisten HP vähenee hyökkäyksestä
 
 #### Game <-> Potion
-- Juoman kerääminen kartalta päivittää pelaajan inventaaria
-- Juoman käyttäminen inventaarista parauttaa HP:tä
+- Juoman kerääminen kartalta päivittää pelaajan inventaariota
+- Juoman käyttäminen inventaariosta palauttaa HP:ta
 - Juoman poistaminen kartalta keräämisen jälkeen
 
 #### Game <-> ScoreRepository
@@ -132,7 +132,7 @@ Automatisoituja testejä tukee myös manuaalinen testaus
 
 Järjestelmätestaus varmistaa, että sovellus toimii kokonaisuutena käyttäjän näkökulmasta.
 
-Sovellusta on asennettu käyttöohjeen mukaan ja sitä on testattu sekä Windows- että Linux-ympäristöissä, ja molemmissa käyttöliittymissä (console ja pygame).
+Sovellusta on asennettu [käyttöohjeen](https://github.com/JoonaPietarinen/ot-harjoitustyo/blob/a1fda381ed88274d36d3b178392470458b943d7d/dokumentaatio/kayttoohje.md) mukaan ja sitä on testattu sekä Windows- että Linux-ympäristöissä, ja molemmissa käyttöliittymissä (console ja pygame).
 
 Sovellusta  on testattu mm. ohjeiden mukaisella käytöllä, sekä tilanteissa, joissa tallennettuja tietoja ei ole entuudestaan, on entuudestaan tai ne ovat väärin muotoiltuja. Sovellus on toiminut odotetusti kaikissa tilanteissa, ja virhetilanteet on käsitelty asianmukaisesti.
 
