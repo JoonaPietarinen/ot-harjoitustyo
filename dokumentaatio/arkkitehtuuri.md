@@ -17,10 +17,12 @@ src/
 │   ├── repositories/        # Persistenttikerros
 │   │   └── score_repository.py  # Tulosten tallennus JSON:iin
 │   │
+│   ├── ui/                  # Käyttöliittymät
+│   │   ├── pygame_ui.py     # Graafinen käyttöliittymä (Pygame)
+│   │   └── ui.py            # Tekstipohjainen käyttöliittymä
+│   │
 │   ├── game.py              # Pelinsääntöjen moottori
-│   ├── game_map.py          # Karttadefinitio
-│   ├── ui.py                # Tekstipohjainen käyttöliittymä
-│   └── pygame_ui.py         # Graafinen käyttöliittymä (Pygame)
+│   └── game_map.py          # Karttadefinitio
 │
 └── main.py                  # Pääohjelma
 
@@ -111,18 +113,18 @@ Game:
 
 ```json
 [
-  {"steps": 42, "kills": 5},
-  {"steps": 51, "kills": 3}
+  {"steps": 42, "kills": 5, "difficulty": "hard"},
+  {"steps": 51, "kills": 3, "difficulty": "easy"}
 ]
 ```
 
 ## Testattavuus
 
 - **Pelilogiikka**: Ei riippuvainen UI:sta, joten helppo testata
-  - `test_game_logic.py`: ~15 testiä liikkumiselle, taistelulle, potionien käytölle
+  - `test_game_logic.py`: ~24 testiä liikkumiselle, taistelulle, potionien käytölle
   
 - **Tallennus**: Eristetty repository-luokkaan
-  - `test_score_repository.py`: ~6 testiä lukemiselle, kirjoitukselle, yhteensopivuudelle
+  - `test_score_repository.py`: ~10 testiä lukemiselle, kirjoitukselle, yhteensopivuudelle
 
 ## Luokkakaavio
 
