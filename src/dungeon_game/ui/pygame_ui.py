@@ -197,7 +197,8 @@ class PygameUI:
         self.message = self.EVENT_MESSAGES.get(game_event, "")
 
         if self.game.is_won:
-            self._save_result(self.game.player.steps, self.game.player.kills, self.game.difficulty.value)
+            self._save_result(self.game.player.steps,
+                              self.game.player.kills, self.game.difficulty.value)
             self.state = "game_over"
         elif not self.game.is_running:
             self.state = "game_over"
@@ -299,6 +300,7 @@ class PygameUI:
                 (self.config.menu_width // 2, 470),
                 center=True,
             )
+
     def _render_menu(self) -> None:
         """Render the main menu screen."""
         self._ensure_menu_mode()

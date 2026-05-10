@@ -16,7 +16,7 @@ from dungeon_game.models.potion import Potion
 
 class GameEvent(Enum):
     """Enumeration of events that occur during gameplay.
-    
+
     These events communicate the results of player actions to the UI layer,
     keeping game logic separate from presentation.
     """
@@ -38,7 +38,7 @@ class GameEvent(Enum):
 
 class Difficulty(Enum):
     """Game difficulty levels.
-    
+
     Affects enemy count, health, damage, and map layout.
     """
     EASY = "easy"
@@ -48,10 +48,10 @@ class Difficulty(Enum):
 
 class Game:
     """Main game logic and state management.
-    
+
     Handles player movement, combat resolution, item collection, and turn-based
     enemy AI. Maintains the game map and all entities (player, enemies, potions).
-    
+
     Attributes:
         map_rows: 2D list representing the game map tiles.
         player: The Player object.
@@ -64,7 +64,7 @@ class Game:
 
     def __init__(self, difficulty: Difficulty = Difficulty.NORMAL):
         """Initialize a new game with the specified difficulty.
-        
+
         Args:
             difficulty: Game difficulty level (EASY, NORMAL, or HARD).
         """
@@ -81,7 +81,7 @@ class Game:
 
     def _get_map_for_difficulty(self) -> list[str]:
         """Get the map layout for the current difficulty level.
-        
+
         Returns:
             List of strings representing the map rows.
         """
@@ -93,7 +93,7 @@ class Game:
 
     def _create_enemies_for_difficulty(self) -> list[Enemy]:
         """Create enemies based on the current difficulty level.
-        
+
         Returns:
             List of Enemy objects appropriate for the difficulty.
         """
@@ -103,12 +103,16 @@ class Game:
             ]
         if self.difficulty == Difficulty.HARD:
             return [
-                create_enemy("orc", 8, 1), create_enemy("goblin", 14, 1), create_enemy("orc", 19, 1),
+                create_enemy("orc", 8, 1), create_enemy(
+                    "goblin", 14, 1), create_enemy("orc", 19, 1),
                 create_enemy("orc", 15, 2),
-                create_enemy("orc", 10, 3),              
-                create_enemy("goblin", 6, 5), create_enemy("orc", 8, 5), create_enemy("orc", 12, 5), create_enemy("orc", 17, 5),
-                create_enemy("orc", 5, 7), create_enemy("goblin", 8, 7), create_enemy("goblin", 10, 7), create_enemy("orc", 15, 7),
-                create_enemy("goblin", 3, 9), create_enemy("orc", 5, 9), create_enemy("goblin", 19, 9),
+                create_enemy("orc", 10, 3),
+                create_enemy("goblin", 6, 5), create_enemy("orc", 8, 5), create_enemy(
+                    "orc", 12, 5), create_enemy("orc", 17, 5),
+                create_enemy("orc", 5, 7), create_enemy("goblin", 8, 7), create_enemy(
+                    "goblin", 10, 7), create_enemy("orc", 15, 7),
+                create_enemy("goblin", 3, 9), create_enemy(
+                    "orc", 5, 9), create_enemy("goblin", 19, 9),
             ]
         # NORMAL
         return [
@@ -119,7 +123,7 @@ class Game:
 
     def _create_potions_for_difficulty(self) -> list[Potion]:
         """Create potions based on the current difficulty level.
-        
+
         Returns:
             List of Potion objects appropriate for the difficulty.
         """
@@ -127,9 +131,9 @@ class Game:
             return [Potion(x=3, y=2)]
         if self.difficulty == Difficulty.HARD:
             return [
-                Potion(x=3, y=3), 
-                Potion(x=7, y=5), 
-                Potion(x=4, y=7), 
+                Potion(x=3, y=3),
+                Potion(x=7, y=5),
+                Potion(x=4, y=7),
                 Potion(x=17, y=9),
             ]
         # NORMAL
@@ -137,11 +141,11 @@ class Game:
 
     def tile_at(self, x: int, y: int) -> str:
         """Get the tile type at the given coordinates.
-        
+
         Args:
             x: X-coordinate.
             y: Y-coordinate.
-            
+
         Returns:
             The tile character, or WALL if coordinates are out of bounds.
         """
@@ -151,11 +155,11 @@ class Game:
 
     def enemy_at(self, x: int, y: int) -> Enemy | None:
         """Find an alive enemy at the given coordinates.
-        
+
         Args:
             x: X-coordinate.
             y: Y-coordinate.
-            
+
         Returns:
             The Enemy object if one exists, None otherwise.
         """
@@ -166,11 +170,11 @@ class Game:
 
     def potion_at(self, x: int, y: int) -> Potion | None:
         """Find a potion at the given coordinates.
-        
+
         Args:
             x: X-coordinate.
             y: Y-coordinate.
-            
+
         Returns:
             The Potion object if one exists, None otherwise.
         """
@@ -181,11 +185,11 @@ class Game:
 
     def _collect_potion(self, x: int, y: int) -> GameEvent:
         """Attempt to collect a potion at the given coordinates.
-        
+
         Args:
             x: X-coordinate.
             y: Y-coordinate.
-            
+
         Returns:
             POTION_PICKED_UP if successful, NONE otherwise.
         """
@@ -199,7 +203,7 @@ class Game:
 
     def use_potion(self) -> GameEvent:
         """Use a potion from inventory to restore health.
-        
+
         Returns:
             POTION_USED if successful, NO_POTION_AVAILABLE if no potions in inventory.
         """
@@ -212,10 +216,10 @@ class Game:
 
     def _resolve_player_attack(self, enemy: Enemy) -> GameEvent:
         """Resolve combat between player and an enemy.
-        
+
         Args:
             enemy: The Enemy being attacked.
-            
+
         Returns:
             GameEvent indicating the combat result.
         """
@@ -223,11 +227,12 @@ class Game:
         if not enemy.is_alive:
             self.enemies.remove(enemy)
             self.player.kills += 1
-            
+
             # Life steal: gain HP based on enemy type
             heal_amount = 2 if enemy.enemy_type == "orc" else 1
-            self.player.hp = min(self.player.max_hp, self.player.hp + heal_amount)
-            
+            self.player.hp = min(self.player.max_hp,
+                                 self.player.hp + heal_amount)
+
             return GameEvent.ENEMY_DEFEATED
 
         self.player.hp -= enemy.damage
@@ -241,14 +246,15 @@ class Game:
 
     def _enemy_turn(self) -> GameEvent:
         """Execute enemy AI for all alive enemies.
-        
+
         Enemies attack if adjacent to the player.
-        
+
         Returns:
             GameEvent indicating if any enemy attacked and the result.
         """
         for enemy in self.enemies:
-            distance = abs(enemy.x - self.player.x) + abs(enemy.y - self.player.y)
+            distance = abs(enemy.x - self.player.x) + \
+                abs(enemy.y - self.player.y)
             if distance == 1:
                 self.player.hp -= enemy.damage
                 if self.player.hp <= 0:
@@ -261,13 +267,13 @@ class Game:
 
     def move_player(self, dx: int, dy: int) -> GameEvent:
         """Attempt to move the player by the given offset.
-        
+
         Checks for walls, enemies, and items at the destination.
-        
+
         Args:
             dx: X-axis movement offset.
             dy: Y-axis movement offset.
-            
+
         Returns:
             GameEvent indicating the result of the movement.
         """
@@ -299,10 +305,10 @@ class Game:
 
     def handle_command(self, command: str) -> GameEvent:
         """Process a player command and update game state.
-        
+
         Args:
             command: Single character command (w/a/s/d for movement, u for potion, q to quit).
-            
+
         Returns:
             GameEvent describing what happened.
         """

@@ -194,10 +194,10 @@ def test_player_heals_from_defeating_orc():
     game.enemies = [create_enemy("orc", 2, 1)]
     game.player.hp = 3
 
-    game.handle_command("d") # Player hp drops to 2
-    game.handle_command("d") # Player hp drops to 1
-    game.player.hp += 1 # Simulate using a potion so player won't die
-    result = game.handle_command("d") # Player hp drops to 1
+    game.handle_command("d")  # Player hp drops to 2
+    game.handle_command("d")  # Player hp drops to 1
+    game.player.hp += 1  # Simulate using a potion so player won't die
+    result = game.handle_command("d")  # Player hp drops to 1
 
     assert result == GameEvent.ENEMY_DEFEATED
     assert game.player.hp == 3  # 1 + 2 from orc defeat
@@ -209,14 +209,15 @@ def test_player_heal_doesnt_exceed_max_hp():
     game.enemies = [create_enemy("orc", 2, 1)]
     game.player.hp = 3
 
-    game.handle_command("d") # Player hp drops to 2
-    game.player.hp += 1 # Simulate using a potion
-    game.handle_command("d") # Player hp drops to 2
-    game.player.hp += 1 # Simulate using a potion
-    result = game.handle_command("d") # Player hp drops to 2
+    game.handle_command("d")  # Player hp drops to 2
+    game.player.hp += 1  # Simulate using a potion
+    game.handle_command("d")  # Player hp drops to 2
+    game.player.hp += 1  # Simulate using a potion
+    result = game.handle_command("d")  # Player hp drops to 2
 
     assert result == GameEvent.ENEMY_DEFEATED
     assert game.player.hp == 3  # Max hp is 3, so + 2 won't result in 4
+
 
 def test_player_dies():
     game = Game()
@@ -226,6 +227,7 @@ def test_player_dies():
     assert result == GameEvent.PLAYER_DIED_IN_COMBAT
     assert not game.is_running
     assert not game.is_won
+
 
 def test_player_dies_from_enemy_turn():
     game = Game()

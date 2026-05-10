@@ -10,7 +10,7 @@ ScoreEntry = dict[str, int | str]
 
 class ScoreRepository:
     """Manages persistence of game scores to a JSON file.
-    
+
     Stores game results (steps taken, enemies defeated, and difficulty) in a
     JSON file, allowing players to view their best scores and personal records.
     Maintains backward compatibility with old score files that only stored steps.
@@ -18,7 +18,7 @@ class ScoreRepository:
 
     def __init__(self, file_path: str = "data/scores.json"):
         """Initialize the repository with a file path.
-        
+
         Args:
             file_path: Path to the JSON file where scores are stored.
         """
@@ -26,10 +26,10 @@ class ScoreRepository:
 
     def get_scores(self, limit: int = 20) -> list[ScoreEntry]:
         """Get the best scores sorted by steps and kills.
-        
+
         Args:
             limit: Maximum number of scores to return (default 20).
-            
+
         Returns:
             A list of score dictionaries sorted by steps (ascending) and kills (descending).
         """
@@ -41,11 +41,11 @@ class ScoreRepository:
         self, difficulty: str, limit: int = 20
     ) -> list[ScoreEntry]:
         """Get the best scores for a specific difficulty level.
-        
+
         Args:
             difficulty: Difficulty level (easy, normal, hard).
             limit: Maximum number of scores to return (default 20).
-            
+
         Returns:
             A list of score dictionaries for the difficulty, sorted by steps
             (ascending) and kills (descending).
@@ -59,7 +59,7 @@ class ScoreRepository:
 
     def get_best_score(self) -> ScoreEntry | None:
         """Get the single best score.
-        
+
         Returns:
             The best score dictionary or None if no scores exist.
         """
@@ -70,7 +70,7 @@ class ScoreRepository:
 
     def save_score(self, steps: int, kills: int, difficulty: str) -> None:
         """Save a new score to the file.
-        
+
         Args:
             steps: Number of steps taken in the game.
             kills: Number of enemies defeated.
@@ -85,7 +85,7 @@ class ScoreRepository:
 
     def _read_scores(self) -> list[ScoreEntry]:
         """Read and parse scores from the JSON file.
-        
+
         Returns:
             A list of score dictionaries. Returns empty list if file doesn't exist or is invalid.
         """
@@ -111,13 +111,13 @@ class ScoreRepository:
 
     def _normalize_score(self, item: object) -> ScoreEntry | None:
         """Convert various score formats to a standard dictionary.
-        
+
         Supports old formats (integer only, dict with steps and kills) and
         new format (dict with steps, kills, and difficulty).
-        
+
         Args:
             item: The score item to normalize.
-            
+
         Returns:
             A normalized score dictionary or None if the format is invalid.
         """
@@ -143,7 +143,7 @@ class ScoreRepository:
 
     def _write_scores(self, scores: list[ScoreEntry]) -> None:
         """Write scores to the JSON file.
-        
+
         Args:
             scores: List of score dictionaries to write.
         """
