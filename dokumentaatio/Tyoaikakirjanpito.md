@@ -15,4 +15,7 @@
 | 24.4  | 6  | pygame otettu käyttöön  |
 | 25.4  | 2  | pygame hiomista  |
 | 28.4  | 7  | lisätty vihollisia, ja päivitetty elämäpisteitä, päivitetty dokumentaatiota  |
-| yht.  | 39   |    |
+| 1.5  | 5  | lisätty uusi vihollistyyppi ja vaikeustasot  |
+| 2.5  | 4  | lisätty omat kartat vaikeustasoille   |
+| 4.5  | 6  | päivitetty tulosten tallennus ja katselmointi, lisätty testejä ja dokumentaatiota  |
+| yht.  | 56   |    |

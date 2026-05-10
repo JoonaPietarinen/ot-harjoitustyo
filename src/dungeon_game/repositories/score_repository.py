@@ -5,14 +5,14 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-ScoreEntry = dict[str, int]
+ScoreEntry = dict[str, int | str]
 
 
 class ScoreRepository:
     """Manages persistence of game scores to a JSON file.
     
-    Stores game results (steps taken and enemies defeated) in a JSON file,
-    allowing players to view their best scores and personal records.
+    Stores game results (steps taken, enemies defeated, and difficulty) in a
+    JSON file, allowing players to view their best scores and personal records.
     Maintains backward compatibility with old score files that only stored steps.
     """
 
@@ -24,11 +24,11 @@ class ScoreRepository:
         """
         self._file_path = Path(file_path)
 
-    def get_scores(self, limit: int = 10) -> list[ScoreEntry]:
+    def get_scores(self, limit: int = 20) -> list[ScoreEntry]:
         """Get the best scores sorted by steps and kills.
         
         Args:
-            limit: Maximum number of scores to return (default 10).
+            limit: Maximum number of scores to return (default 20).
             
         Returns:
             A list of score dictionaries sorted by steps (ascending) and kills (descending).
@@ -36,6 +36,26 @@ class ScoreRepository:
         scores = self._read_scores()
         scores.sort(key=lambda item: (item["steps"], -item["kills"]))
         return scores[:limit]
+
+    def get_scores_by_difficulty(
+        self, difficulty: str, limit: int = 20
+    ) -> list[ScoreEntry]:
+        """Get the best scores for a specific difficulty level.
+        
+        Args:
+            difficulty: Difficulty level (easy, normal, hard).
+            limit: Maximum number of scores to return (default 20).
+            
+        Returns:
+            A list of score dictionaries for the difficulty, sorted by steps
+            (ascending) and kills (descending).
+        """
+        scores = self._read_scores()
+        filtered = [
+            s for s in scores if s.get("difficulty") == difficulty
+        ]
+        filtered.sort(key=lambda item: (item["steps"], -item["kills"]))
+        return filtered[:limit]
 
     def get_best_score(self) -> ScoreEntry | None:
         """Get the single best score.
@@ -48,17 +68,20 @@ class ScoreRepository:
             return None
         return scores[0]
 
-    def save_score(self, steps: int, kills: int) -> None:
+    def save_score(self, steps: int, kills: int, difficulty: str) -> None:
         """Save a new score to the file.
         
         Args:
             steps: Number of steps taken in the game.
             kills: Number of enemies defeated.
+            difficulty: Game difficulty level (easy, normal, hard).
         """
         scores = self._read_scores()
-        scores.append({"steps": steps, "kills": kills})
+        scores.append(
+            {"steps": steps, "kills": kills, "difficulty": difficulty}
+        )
         scores.sort(key=lambda item: (item["steps"], -item["kills"]))
-        self._write_scores(scores[:10])
+        self._write_scores(scores[:20])
 
     def _read_scores(self) -> list[ScoreEntry]:
         """Read and parse scores from the JSON file.
@@ -89,7 +112,8 @@ class ScoreRepository:
     def _normalize_score(self, item: object) -> ScoreEntry | None:
         """Convert various score formats to a standard dictionary.
         
-        Supports both old (integer only) and new (dict with steps and kills) formats.
+        Supports old formats (integer only, dict with steps and kills) and
+        new format (dict with steps, kills, and difficulty).
         
         Args:
             item: The score item to normalize.
@@ -98,13 +122,22 @@ class ScoreRepository:
             A normalized score dictionary or None if the format is invalid.
         """
         if isinstance(item, int):
-            return {"steps": item, "kills": 0}
+            return {
+                "steps": item,
+                "kills": 0,
+                "difficulty": "normal",
+            }
 
         if isinstance(item, dict):
             steps = item.get("steps")
             kills = item.get("kills", 0)
+            difficulty = item.get("difficulty", "normal")
             if isinstance(steps, int) and isinstance(kills, int):
-                return {"steps": steps, "kills": kills}
+                return {
+                    "steps": steps,
+                    "kills": kills,
+                    "difficulty": difficulty,
+                }
 
         return None
 

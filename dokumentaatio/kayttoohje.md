@@ -15,11 +15,16 @@ poetry install
 
 ### Käynnistys
 
+Pygame:
 
 ```bash
 poetry run invoke start
 ```
+Konsoli:
 
+```bash
+poetry run invoke start-console
+```
 
 ## Peli-ohjaus
 
@@ -45,12 +50,19 @@ Avautuu pelin käynnistyessä. Valinnat:
 - **2**: Näytä tallennetut tulokset
 - **3**: Lopeta sovellus
 
+Uuden pelin alkaessa, valitse vaikeustaso:
+
+- **1**: Helppo
+- **2**: Normaali
+- **3**: Vaikea
+
 ### Pelinäkymä
 
 ```
 - Kartta: Ruudukkomuotoinen ympäristö
   - @  = pelaajasi
-  - E  = vihollinen
+  - E  = vaikea vihollinen
+  - e  = helppo vihollinen
   - !  = potion (juoma)
   - X  = uloskäynti (voitto)
   - #  = seinä (ei voi mennä läpi)
@@ -84,7 +96,7 @@ Näyttää top 10 parasta tulosta järjestettynä:
 - Pelaaja voi hyökätä uudelleen liikkumalla uudestaan vihollisen suuntaan
 
 ### Esineet
-- **Potion** (!) palauttaa 4 HP:tä kun käytetään
+- **Potion** (!) palauttaa 3 HP:tä kun käytetään
 - Voit kantaa rajatonta määrää potioneja
 - Poimi potion liikkumalla sen päälle
 

@@ -45,3 +45,15 @@
 - Päävalikko ja tulosnäkymä toteutettiin pygame-ikkunaan
 - Muutoksia pelaajan ja vihollisten elämäpisteisiin
 - Peli tallentaa nyt myös tappojen määrän
+
+## Viikko 7
+
+- Lisätty uusi vihollistyyppi, joka on heikompi
+- Lisätty 3 vaikeustasoa, jotka tallentuvat tuloksiin
+- Lisätty omat kartat jokaiselle vaikeustasolle
+- Päivitetty testejä
+- Päivitetty dokumentaatiota, myös docstringejä
+- Lisätty pelaajalle life steal-ominaisuus, joka palauttaa osan vihollisen vahingosta pelaajalle
+- Top 20 tulokset tallennetaan, niistä kuitenkin näytetään vain top 10
+- Tuloksia voi suodattaa vaikeustason mukaan päävalikossa
+- Pelin voi nyt käynnistää halutulla käyttöliittymällä (console tai pygame) 

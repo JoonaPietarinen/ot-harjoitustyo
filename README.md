@@ -28,8 +28,16 @@ poetry install
 
 Käynnistä peli:
 
+Pygame:
+
 ```bash
 poetry run invoke start
+```
+
+Konsoli:
+
+```bash
+poetry run invoke start-console
 ```
 
 Peli avautuu pygame-ikkunassa.

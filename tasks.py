@@ -9,6 +9,10 @@ SEP = " & " if IS_WINDOWS else "; "
 def start(ctx):
     ctx.run("python3 src/main.py", pty=not IS_WINDOWS)
 
+@task
+def start_console(ctx):
+    ctx.run("python3 src/main.py --no-pygame", pty=not IS_WINDOWS)
+
 
 @task
 def test(ctx):

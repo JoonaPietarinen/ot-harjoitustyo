@@ -2,8 +2,14 @@
 
 from enum import Enum, auto
 
-from dungeon_game.game_map import DEFAULT_MAP, EXIT, WALL
-from dungeon_game.models.enemy import Enemy
+from dungeon_game.game_map import (
+    DEFAULT_MAP,
+    EASY_MAP,
+    HARD_MAP,
+    EXIT,
+    WALL,
+)
+from dungeon_game.models.enemy import Enemy, create_enemy
 from dungeon_game.models.player import Player
 from dungeon_game.models.potion import Potion
 
@@ -30,6 +36,16 @@ class GameEvent(Enum):
     NO_POTION_AVAILABLE = auto()
 
 
+class Difficulty(Enum):
+    """Game difficulty levels.
+    
+    Affects enemy count, health, damage, and map layout.
+    """
+    EASY = "easy"
+    NORMAL = "normal"
+    HARD = "hard"
+
+
 class Game:
     """Main game logic and state management.
     
@@ -43,18 +59,81 @@ class Game:
         potions: List of Potion objects on the map.
         is_running: Whether the game is currently active.
         is_won: Whether the player has reached the exit.
+        difficulty: Current game difficulty level.
     """
 
-    def __init__(self):
-        """Initialize a new game with the default map and entities."""
-        self.map_rows = [list(row) for row in DEFAULT_MAP]
+    def __init__(self, difficulty: Difficulty = Difficulty.NORMAL):
+        """Initialize a new game with the specified difficulty.
+        
+        Args:
+            difficulty: Game difficulty level (EASY, NORMAL, or HARD).
+        """
+        self.difficulty = difficulty
+        map_data = self._get_map_for_difficulty()
+        self.map_rows = [list(row) for row in map_data]
         self.height = len(self.map_rows)
         self.width = len(self.map_rows[0])
         self.player = Player(x=1, y=1)
-        self.enemies = [Enemy(x=8, y=1), Enemy(x=6, y=5), Enemy(x=7, y=4)]
-        self.potions = [Potion(x=4, y=1)]
+        self.enemies = self._create_enemies_for_difficulty()
+        self.potions = self._create_potions_for_difficulty()
         self.is_running = True
         self.is_won = False
+
+    def _get_map_for_difficulty(self) -> list[str]:
+        """Get the map layout for the current difficulty level.
+        
+        Returns:
+            List of strings representing the map rows.
+        """
+        if self.difficulty == Difficulty.EASY:
+            return EASY_MAP
+        if self.difficulty == Difficulty.HARD:
+            return HARD_MAP
+        return DEFAULT_MAP
+
+    def _create_enemies_for_difficulty(self) -> list[Enemy]:
+        """Create enemies based on the current difficulty level.
+        
+        Returns:
+            List of Enemy objects appropriate for the difficulty.
+        """
+        if self.difficulty == Difficulty.EASY:
+            return [
+                create_enemy("goblin", 6, 5),
+            ]
+        if self.difficulty == Difficulty.HARD:
+            return [
+                create_enemy("orc", 8, 1), create_enemy("goblin", 14, 1), create_enemy("orc", 19, 1),
+                create_enemy("orc", 15, 2),
+                create_enemy("orc", 10, 3),              
+                create_enemy("goblin", 6, 5), create_enemy("orc", 8, 5), create_enemy("orc", 12, 5), create_enemy("orc", 17, 5),
+                create_enemy("orc", 5, 7), create_enemy("goblin", 8, 7), create_enemy("goblin", 10, 7), create_enemy("orc", 15, 7),
+                create_enemy("goblin", 3, 9), create_enemy("orc", 5, 9), create_enemy("goblin", 19, 9),
+            ]
+        # NORMAL
+        return [
+            create_enemy("orc", 8, 1),
+            create_enemy("goblin", 6, 5),
+            create_enemy("goblin", 7, 4),
+        ]
+
+    def _create_potions_for_difficulty(self) -> list[Potion]:
+        """Create potions based on the current difficulty level.
+        
+        Returns:
+            List of Potion objects appropriate for the difficulty.
+        """
+        if self.difficulty == Difficulty.EASY:
+            return [Potion(x=3, y=2)]
+        if self.difficulty == Difficulty.HARD:
+            return [
+                Potion(x=3, y=3), 
+                Potion(x=7, y=5), 
+                Potion(x=4, y=7), 
+                Potion(x=17, y=9),
+            ]
+        # NORMAL
+        return [Potion(x=3, y=3), Potion(x=17, y=1)]
 
     def tile_at(self, x: int, y: int) -> str:
         """Get the tile type at the given coordinates.
@@ -144,6 +223,11 @@ class Game:
         if not enemy.is_alive:
             self.enemies.remove(enemy)
             self.player.kills += 1
+            
+            # Life steal: gain HP based on enemy type
+            heal_amount = 2 if enemy.enemy_type == "orc" else 1
+            self.player.hp = min(self.player.max_hp, self.player.hp + heal_amount)
+            
             return GameEvent.ENEMY_DEFEATED
 
         self.player.hp -= enemy.damage
@@ -171,7 +255,7 @@ class Game:
                     self.player.hp = 0
                     self.is_running = False
                     self.is_won = False
-                    return GameEvent.ENEMY_HIT_PLAYER_FATAL
+                    return GameEvent.PLAYER_DIED_IN_COMBAT
                 return GameEvent.ENEMY_HIT_PLAYER
         return GameEvent.NONE
 

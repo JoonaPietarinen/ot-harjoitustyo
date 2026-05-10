@@ -6,7 +6,7 @@ from dataclasses import dataclass
 
 import pygame
 
-from dungeon_game.game import Game, GameEvent
+from dungeon_game.game import Game, GameEvent, Difficulty
 from dungeon_game.repositories.score_repository import ScoreRepository
 
 
@@ -69,6 +69,7 @@ class PygameUI:
         self.state = "menu"
         self.message = ""
         self.best_scores = self.score_repository.get_scores()
+        self.difficulty = Difficulty.NORMAL
         self.screen = pygame.display.set_mode(
             (self.config.menu_width, self.config.menu_height)
         )
@@ -84,9 +85,11 @@ class PygameUI:
                     running = False
                 elif self.state == "menu":
                     self._handle_menu_event(event)
+                elif self.state == "difficulty":
+                    self._handle_difficulty_event(event)
                 elif self.state == "game":
                     self._handle_game_event(event)
-                elif self.state == "results":
+                elif self.state == "results" or self.state == "scores_display":
                     self._handle_results_event(event)
                 elif self.state == "game_over":
                     self._handle_game_over_event(event)
@@ -101,11 +104,8 @@ class PygameUI:
         if event.type != pygame.KEYDOWN:  # pylint: disable=no-member
             return
         if event.key == pygame.K_1:  # pylint: disable=no-member
-            self.game = Game()
-            self.message = ""
-            self.state = "game"
+            self.state = "difficulty"
         elif event.key == pygame.K_2:  # pylint: disable=no-member
-            self.best_scores = self.score_repository.get_scores()
             self.state = "results"
         elif event.key in (
             pygame.K_3,  # pylint: disable=no-member
@@ -115,6 +115,26 @@ class PygameUI:
                 pygame.event.Event(pygame.QUIT)  # pylint: disable=no-member
             )
 
+    def _handle_difficulty_event(self, event: pygame.event.Event) -> None:
+        """Handle difficulty selection events."""
+        if event.type != pygame.KEYDOWN:  # pylint: disable=no-member
+            return
+        if event.key == pygame.K_1:  # pylint: disable=no-member
+            self.difficulty = Difficulty.EASY
+            self._start_new_game()
+        elif event.key == pygame.K_2:  # pylint: disable=no-member
+            self.difficulty = Difficulty.NORMAL
+            self._start_new_game()
+        elif event.key == pygame.K_3:  # pylint: disable=no-member
+            self.difficulty = Difficulty.HARD
+            self._start_new_game()
+
+    def _start_new_game(self):
+        """Start a new game with selected difficulty."""
+        self.game = Game(self.difficulty)
+        self.message = ""
+        self.state = "game"
+
     def _handle_results_event(self, event: pygame.event.Event) -> None:
         """Handle results view navigation events."""
         if event.type == pygame.KEYDOWN and event.key in (  # pylint: disable=no-member
@@ -123,6 +143,27 @@ class PygameUI:
             pygame.K_RETURN,  # pylint: disable=no-member
         ):
             self.state = "menu"
+        elif event.type == pygame.KEYDOWN:  # pylint: disable=no-member
+            if event.key == pygame.K_1:  # pylint: disable=no-member
+                self._show_all_scores()
+            elif event.key == pygame.K_2:  # pylint: disable=no-member
+                self._show_scores_for_difficulty("easy")
+            elif event.key == pygame.K_3:  # pylint: disable=no-member
+                self._show_scores_for_difficulty("normal")
+            elif event.key == pygame.K_4:  # pylint: disable=no-member
+                self._show_scores_for_difficulty("hard")
+
+    def _show_all_scores(self):
+        """Load all scores for display."""
+        self.best_scores = self.score_repository.get_scores()
+        self.state = "scores_display"
+
+    def _show_scores_for_difficulty(self, difficulty: str):
+        """Load scores for a specific difficulty."""
+        self.best_scores = (
+            self.score_repository.get_scores_by_difficulty(difficulty)
+        )
+        self.state = "scores_display"
 
     def _handle_game_over_event(self, event: pygame.event.Event) -> None:
         """Handle game over screen events."""
@@ -133,9 +174,7 @@ class PygameUI:
             ):
                 self.state = "menu"
             elif event.key == pygame.K_1:  # pylint: disable=no-member
-                self.game = Game()
-                self.message = ""
-                self.state = "game"
+                self.state = "difficulty"
 
     def _handle_game_event(self, event: pygame.event.Event) -> None:
         """Handle in-game player input events."""
@@ -158,7 +197,7 @@ class PygameUI:
         self.message = self.EVENT_MESSAGES.get(game_event, "")
 
         if self.game.is_won:
-            self._save_result(self.game.player.steps, self.game.player.kills)
+            self._save_result(self.game.player.steps, self.game.player.kills, self.game.difficulty.value)
             self.state = "game_over"
         elif not self.game.is_running:
             self.state = "game_over"
@@ -167,8 +206,12 @@ class PygameUI:
         """Render the current UI state."""
         if self.state == "menu":
             self._render_menu()
+        elif self.state == "difficulty":
+            self._render_difficulty()
         elif self.state == "results":
             self._render_results()
+        elif self.state == "scores_display":
+            self._render_results_list()
         elif self.state == "game" and self.game is not None:
             self._render_game()
         elif self.state == "game_over" and self.game is not None:
@@ -186,6 +229,76 @@ class PygameUI:
                 (self.config.menu_width, self.config.menu_height)
             )
 
+    def _render_results_list(self) -> None:
+        """Render the results/scores screen."""
+        self._ensure_menu_mode()
+        self.screen.fill(self.colors.background)
+        self._draw_text(
+            "Tallennetut tulokset",
+            self.title_font,
+            self.colors.text,
+            (self.config.menu_width // 2, 50),
+            center=True,
+        )
+        if not self.best_scores:
+            self._draw_text(
+                "Ei tallennettuja tuloksia.",
+                self.font,
+                self.colors.text,
+                (self.config.menu_width // 2, 160),
+                center=True,
+            )
+            self._draw_text(
+                "Vaihda listaa painamalla: 1: Kaikki, 2: Helppo, 3: Normaali, 4: Vaikea",
+                self.small_font,
+                self.colors.message,
+                (self.config.menu_width // 2, 450),
+                center=True,
+            )
+            self._draw_text(
+                "Palaa takaisin päävalikkoon painamalla Enter, Esc tai Backspace",
+                self.small_font,
+                self.colors.message,
+                (self.config.menu_width // 2, 470),
+                center=True,
+            )
+        else:
+            best = self.best_scores[0]
+            self._draw_text(
+                (
+                    f"Paras tulos: {best['steps']} askelta, "
+                    f"{best['kills']} tappoa ({best['difficulty']})"
+                ),
+                self.font,
+                self.colors.text,
+                (self.config.menu_width // 2, 130),
+                center=True,
+            )
+            for index, score in enumerate(self.best_scores[:10], start=1):
+                self._draw_text(
+                    (
+                        f"{index}. {score['steps']} askelta, "
+                        f"{score['kills']} tappoa ({score['difficulty']})"
+                    ),
+                    self.font,
+                    self.colors.text,
+                    (self.config.menu_width // 2, 170 + index * 32),
+                    center=True,
+                )
+            self._draw_text(
+                "Vaihda listaa painamalla: 1: Kaikki, 2: Helppo, 3: Normaali, 4: Vaikea",
+                self.small_font,
+                self.colors.message,
+                (self.config.menu_width // 2, 450),
+                center=True,
+            )
+            self._draw_text(
+                "Palaa takaisin päävalikkoon painamalla Enter, Esc tai Backspace",
+                self.small_font,
+                self.colors.message,
+                (self.config.menu_width // 2, 470),
+                center=True,
+            )
     def _render_menu(self) -> None:
         """Render the main menu screen."""
         self._ensure_menu_mode()
@@ -229,6 +342,39 @@ class PygameUI:
             center=True,
         )
 
+    def _render_difficulty(self) -> None:
+        """Render the difficulty selection screen."""
+        self._ensure_menu_mode()
+        self.screen.fill(self.colors.background)
+        self._draw_text(
+            "Valitse vaikeustaso",
+            self.title_font,
+            self.colors.text,
+            (self.config.menu_width // 2, 100),
+            center=True,
+        )
+        self._draw_text(
+            "1  Helppo (Easy)",
+            self.font,
+            self.colors.text,
+            (self.config.menu_width // 2, 200),
+            center=True,
+        )
+        self._draw_text(
+            "2  Normaali (Normal)",
+            self.font,
+            self.colors.text,
+            (self.config.menu_width // 2, 260),
+            center=True,
+        )
+        self._draw_text(
+            "3  Vaikea (Hard)",
+            self.font,
+            self.colors.text,
+            (self.config.menu_width // 2, 320),
+            center=True,
+        )
+
     def _render_results(self) -> None:
         """Render the results/scores screen."""
         self._ensure_menu_mode()
@@ -240,31 +386,41 @@ class PygameUI:
             (self.config.menu_width // 2, 50),
             center=True,
         )
-        if not self.best_scores:
-            self._draw_text(
-                "Ei tallennettuja tuloksia.",
-                self.font,
-                self.colors.text,
-                (self.config.menu_width // 2, 160),
-                center=True,
-            )
-        else:
-            best = self.best_scores[0]
-            self._draw_text(
-                f"Paras tulos: {best['steps']} askelta, {best['kills']} tappoa",
-                self.font,
-                self.colors.text,
-                (self.config.menu_width // 2, 130),
-                center=True,
-            )
-            for index, score in enumerate(self.best_scores[:10], start=1):
-                self._draw_text(
-                    f"{index}. {score['steps']} askelta, {score['kills']} tappoa",
-                    self.font,
-                    self.colors.text,
-                    (self.config.menu_width // 2, 170 + index * 32),
-                    center=True,
-                )
+        self._draw_text(
+            "Valitse vaikeustaso",
+            self.title_font,
+            self.colors.text,
+            (self.config.menu_width // 2, 100),
+            center=True,
+        )
+        self._draw_text(
+            "1  Kaikki",
+            self.font,
+            self.colors.text,
+            (self.config.menu_width // 2, 200),
+            center=True,
+        )
+        self._draw_text(
+            "2  Helppo",
+            self.font,
+            self.colors.text,
+            (self.config.menu_width // 2, 260),
+            center=True,
+        )
+        self._draw_text(
+            "3  Normaali",
+            self.font,
+            self.colors.text,
+            (self.config.menu_width // 2, 320),
+            center=True,
+        )
+        self._draw_text(
+            "4  Vaikea",
+            self.font,
+            self.colors.text,
+            (self.config.menu_width // 2, 380),
+            center=True,
+        )
         self._draw_text(
             "Palaa takaisin painamalla Enter, Esc tai Backspace",
             self.small_font,
@@ -393,28 +549,35 @@ class PygameUI:
             title,
             self.title_font,
             self.colors.text,
-            (self.screen.get_width() // 2, 120),
+            (self.screen.get_width() // 2, 80),
             center=True,
         )
         self._draw_text(
             f"Askeleet: {self.game.player.steps}",
             self.font,
             self.colors.text,
-            (self.screen.get_width() // 2, 190),
+            (self.screen.get_width() // 2, 160),
             center=True,
         )
         self._draw_text(
             f"Tapot: {self.game.player.kills}",
             self.font,
             self.colors.text,
-            (self.screen.get_width() // 2, 225),
+            (self.screen.get_width() // 2, 200),
             center=True,
         )
         self._draw_text(
-            "Enter tai Esc valikkoon",
+            f"Vaikeustaso: {self.game.difficulty.value}",
+            self.font,
+            self.colors.text,
+            (self.screen.get_width() // 2, 240),
+            center=True,
+        )
+        self._draw_text(
+            "1 = Uusi peli, Enter/Esc = Valikko",
             self.small_font,
             self.colors.message,
-            (self.screen.get_width() // 2, 300),
+            (self.screen.get_width() // 2, 320),
             center=True,
         )
 
@@ -444,10 +607,10 @@ class PygameUI:
             return self.colors.exit
         return self.colors.floor
 
-    def _save_result(self, steps: int, kills: int) -> None:
+    def _save_result(self, steps: int, kills: int, difficulty: str) -> None:
         """Save game result and check for new record."""
         previous_best = self.score_repository.get_best_score()
-        self.score_repository.save_score(steps, kills)
+        self.score_repository.save_score(steps, kills, difficulty)
         current_best = self.score_repository.get_best_score()
         if previous_best is None or (
             current_best is not None

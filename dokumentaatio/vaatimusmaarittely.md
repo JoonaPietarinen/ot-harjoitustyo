@@ -2,63 +2,57 @@
 
 ## Sovelluksen tarkoitus
 
-Sovelluksen tarkoituksena on *pieni*, **laajennettavissa** oleva roguelike-tyyppinen luolastoseikkailupeli, jossa pelaaja liikkuu ruudukkopohjaisessa luolastossa, taistelee vihollisia vastaan, kerää esineitä ja pyrkii selviytymään mahdollisimman pitkälle ennen kuolemaansa.  
-Tavoitteena on toteuttaa selkeästi rajattu perusversio, jonka keskeiset toiminnot saadaan nopeasti valmiiksi ja jonka ympärille voidaan lisätä uusia pelimekaniikkoja, pysyväistallennus ja testattava sovelluslogiikka.
+Yksinkertainen roguelike-tyyppinen luolastoseikkailupeli, jossa pelaaja liikkuu ruudukkopohjaisessa luolastossa, taistelee vihollisia vastaan, kerää esineitä ja pyrkii selviytymään uloskäyntiin saakka.
 
 ## Käyttäjät
 
-Sovelluksessa on vain yksi käyttäjärooli: pelaaja, joka käynnistää pelin, ohjaa hahmoa ja tarkastelee pelin esittämiä tuloksia (esimerkiksi pisteitä tai tilastoja).
+Sovelluksella on yksi käyttäjärooli: pelaaja.
 
 ## Käyttöliittymäluonnos
 
-**Alkuvaiheessa** sovellus tarjoaa yksinkertaisen tekstipohjaisen käyttöliittymän, jossa pelaaja näkee ruudukkokartan, oman hahmonsa, viholliset ja perusstatistiikat.  
-Pelin käynnistyttyä pelaajalle näytetään päävalikko, josta voi aloittaa uuden pelin, tarkastella aiempien pelien tuloksia tai lopettaa sovelluksen.
+Sovellus tarjoaa kaksi käyttöliittymää:
+- Tekstipohjainen käyttöliittymä
+- Graafinen Pygame-pohjainen käyttöliittymä
+
+Molempien kautta pelaaja pääsee päävalikkoon, josta voi aloittaa pelin, katsella tuloksia tai lopettaa sovelluksen.
 
 ## Perusversion tarjoama toiminnallisuus
 
-### Pelin aloitus ja perusnäkymä
+### Pelin alussa
 
-- Pelaaja voi käynnistää sovelluksen ja siirtyä päävalikkoon.  – tehty
-- Pelaaja voi aloittaa uuden pelin päävalikosta.  – tehty
-- Uusi peli käynnistyy ennalta määritellystä luolastosta, jossa on seinistä ja lattiasta koostuva ruudukkokartta.  – tehty
-- Pelaaja näkee kartan lisäksi oman hahmonsa elämäpisteet ja mahdolliset perustilastot (esim. taso tai tappojen määrä).  – tehty
+- Pelaaja voi valita vaikeustason (helppo, normaali, vaikea)
+- Jokainen vaikeustaso käyttää eri karttaa ja vihollisten määrää
+- Pelaaja näkee ruudukkokartan, omat tilastot (HP, askeleet, tapot, juomat)
 
-### Liikkuminen ja ympäristö
+### Pelinaikana
 
-- Pelaaja voi liikkua neljään suuntaan (ylös, alas, vasen, oikea).  – tehty
-- Liikkuminen ei onnistu seinäruutuihin tai kartan ulkopuolelle.  – tehty
-- Kartalla voi olla erilaisia ruututyyppejä (esim. lattia, seinä, uloskäynti), jotka vaikuttavat liikkumiseen.  – tehty
+- Pelaaja voi liikkua neljään suuntaan (W/A/S/D)
+- Pelaaja voi käyttää juomaa (U) paranatakseen elämäpisteitä
+- Pelaaja voi lopettaa pelin (Q)
+- Pelaaja taistelee vihollisia vastaan
+- Pelaaja saa elämää takaisin tappamalla vihollisia (life steal)
+- Pelaaja voi kerätä juomia kartalta
 
-### Viholliset ja taistelu
+### Pelin päätyttyä
 
-- Kartalla on vähintään yksi vihollistyyppi, joka näkyy pelaajalle ruudulla.  – tehty
-- Viholliset toimivat vuoropohjaisesti: aina pelaajan vuoron jälkeen on vihollisten vuoro.  – tehty
-- Kun pelaaja liikkuu vihollisen ruutuun tai hyökkää sen viereen, käynnistyy yksinkertainen taistelumekaniikka (esim. hyökkäys, vihollisen vastahyökkäys).  – tehty
-- Jos pelaajan elämäpisteet laskevat nollaan, peli päättyy häviöön.  – tehty
+- Peli päättyy pelaajan kuollessa tai saavutettaessa uloskäynnin
+- Pelaaja näkee tulokset (askeleet, tapot, vaikeustaso)
+- Tulokset tallentuvat JSON-tiedostoon
 
-### Esineet
+### Tulosten tarkastelu
 
-- Kartalla voi olla perusesineitä (esim. parantavia potion-juomia).  – tehty
-- Pelaaja voi kerätä esineitä ja käyttää niitä (esim. potion palauttaa osan elämäpisteistä).  – tehty
+- Pelaaja voi tarkastella kaikkia tuloksia (Top 10)
+- Pelaaja voi filteroida tuloksia vaikeustason mukaan
+- Jokaisen vaikeustason omat leaderboardit
 
-### Pelin päättyminen ja tulos
-
-- Peli päättyy, kun pelaaja kuolee tai saavuttaa tason uloskäynnin.  – tehty
-- Peli laskee yksinkertaisen pistemäärän (esim. kuljetut askeleet, tapetut viholliset, kerätyt esineet).  – tehty
-- Peli näyttää lopputuloksen yhteenvedon (esim. pistemäärä ja muut olennaiset tilastot).  – tehty
-
-### Tietojen tallennus
-
-- Sovellus tallentaa perusversiossa ainakin yhden tyyppisen pysyvän tiedon tiedostoon (esim. paras pistetulos tai lista parhaista tuloksista).  – tehty
-- Pelaaja voi päävalikosta tarkastella aiempia tallennettuja tuloksia.  – tehty
 
 ## Jatkokehitysideoita
 
-Perusversion jälkeen sovellusta voidaan laajentaa ajan salliessa esimerkiksi seuraavilla toiminnallisuuksilla:
-
-- Useampi vaikeustaso, joka vaikuttaa vihollisten määrään, vahinkoon tai kartan kokoon.  
-- Useampia vihollistyyppejä erilaisilla ominaisuuksilla (esim. liikkumislogiikka, hyökkäysvoima, erikoiskyvyt).  
-- Laajempi esine- ja inventaariomekaniikka, jossa pelaaja voi kantaa useita esineitä, aseita ja panssareita.  
-- Satunnaisesti generoitavat luolastot, jotka luodaan algoritmisesti pelin käynnistyessä tai luetaan konfiguraatiotiedostoista.  
-- Mahdollisuus jatkaa aiemmin tallennettua peliä useamman tallennus-slotin avulla.  
-- Graafinen käyttöliittymä tekstipohjaisen käyttöliittymän rinnalle tai tilalle. – tehty
+- Satunnaisesti generoitavat luolastot
+- Pelitilan tallentaminen ja lataaminen
+- Erilaisia esineitä ja aseita
+- Erikoiskyvyt vihollisille
+- Kehitysjärjestelmä pelaajalle
+- Ääniefektit ja musiikki
+- Useampia tasoja ja teemoja
+- Kehittyneempi taistelusysteemi (esim. vuoropohjainen omalla käyttöliittymällä)
