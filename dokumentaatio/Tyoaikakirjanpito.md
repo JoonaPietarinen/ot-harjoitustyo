@@ -18,4 +18,5 @@
 | 1.5  | 5  | lisätty uusi vihollistyyppi ja vaikeustasot  |
 | 2.5  | 4  | lisätty omat kartat vaikeustasoille   |
 | 4.5  | 6  | päivitetty tulosten tallennus ja katselmointi, lisätty testejä ja dokumentaatiota  |
-| yht.  | 56   |    |
+| 10.5  | 4   | lisätty mahdollisuus valita pygamen ja konsolin välillä, dokumentaation päivitys  |
+| yht.  | 60   |    |
