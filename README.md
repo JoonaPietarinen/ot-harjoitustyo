@@ -1,6 +1,10 @@
 # Ohjelmistotekniikka, harjoitustyö
 
-Olen toteuttamassa yksinkertaista _**roguelike-tyyppistä luolastoseikkailupeliä**_, jossa pelaaja etenee _vihollisia_ ja _ansoja_ sisältävissä tasoissa, kerää **esineitä** ja pyrkii selviytymään mahdollisimman pitkälle. 
+Yksinkertainen roguelike-tyyppinen luolastoseikkailupeli, jossa pelaaja yrittää läpäistä vihollisia ja potioneita sisältävän tason saavuttamalla uloskäynnin.
+
+Pelaajan onnistuneista suorituksista tallennetaan tiedot käytetyistä askelista, tappojen määrästä sekä vaikeustasosta. Näitä tietoja voi tarkastella päävalikosta. Suorituksia voi olla tallennettuna yhteensä maksimissaan 20, mutta niistä näytetään max 10 per kategoria päävalikossa.
+
+Peli toimii sekä Windows- että Linux-ympäristöissä.
 
 ## Dokumentaatio
 
